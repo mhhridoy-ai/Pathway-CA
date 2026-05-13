@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PathwayCA — Your Canada Journey Support System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --maple: #C8392B;
+    --maple-light: #F9E8E7;
+    --sky: #1A6FA8;
+    --sky-light: #E8F4FF;
+    --sage: #2E7D56;
+    --sage-light: #E6F4ED;
+    --ink: #1A1A2E;
+    --muted: #6B7280;
+    --border: rgba(0,0,0,0.08);
+    --white: #FFFFFF;
+    --surface: #F8F7F5;
+    --display: 'Fraunces', Georgia, serif;
+    --body: 'DM Sans', system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--body); color: var(--ink); background: var(--white); line-height: 1.6; }
+  a { color: inherit; text-decoration: none; }
+  img { max-width: 100%; display: block; }
+
+  /* NAV */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 68px;
+  }
+  .nav-logo { font-family: var(--display); font-size: 1.4rem; font-weight: 600; color: var(--ink); }
+  .nav-logo span { color: var(--maple); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-size: 0.9rem; font-weight: 400; color: var(--muted); transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta { background: var(--maple); color: white; padding: 0.55rem 1.25rem; border-radius: 100px; font-size: 0.875rem; font-weight: 500; transition: opacity 0.2s; }
+  .nav-cta:hover { opacity: 0.88; }
+  .nav-mobile-menu { display: none; background: none; border: none; cursor: pointer; font-size: 1.5rem; }
+
+  /* HERO */
+  .hero {
+    padding: 100px 2rem 80px;
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--maple-light); color: var(--maple);
+    padding: 0.35rem 0.85rem; border-radius: 100px;
+    font-size: 0.8rem; font-weight: 500; margin-bottom: 1.5rem;
+  }
+  .hero-tag::before { content: '🍁'; font-size: 0.9rem; }
+  h1 {
+    font-family: var(--display); font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+    font-weight: 600; line-height: 1.1; letter-spacing: -0.02em;
+    margin-bottom: 1.25rem; color: var(--ink);
+  }
+  h1 em { font-style: italic; color: var(--maple); }
+  .hero-sub {
+    font-size: 1.1rem; color: var(--muted); line-height: 1.7;
+    max-width: 480px; margin-bottom: 2rem;
+  }
+  .hero-btns { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--maple); color: white;
+    padding: 0.75rem 1.5rem; border-radius: 100px;
+    font-size: 0.95rem; font-weight: 500;
+    transition: transform 0.15s, opacity 0.15s;
+    display: inline-block;
+  }
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+  .btn-secondary {
+    background: var(--white); color: var(--ink);
+    padding: 0.75rem 1.5rem; border-radius: 100px;
+    font-size: 0.95rem; font-weight: 500; border: 1.5px solid var(--border);
+    transition: border-color 0.15s, transform 0.15s;
+    display: inline-block;
+  }
+  .btn-secondary:hover { border-color: var(--ink); transform: translateY(-1px); }
+  .hero-trust {
+    display: flex; align-items: center; gap: 0.75rem;
+    margin-top: 2rem; font-size: 0.85rem; color: var(--muted);
+  }
+  .trust-dots { display: flex; gap: -4px; }
+  .trust-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--surface); border: 2px solid var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem; margin-right: -6px;
+  }
+
+  /* Hero Visual */
+  .hero-visual {
+    position: relative;
+  }
+  .hero-card-main {
+    background: var(--ink); color: white;
+    border-radius: 20px; padding: 2rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-card-main::before {
+    content: '';
+    position: absolute; top: -40px; right: -40px;
+    width: 180px; height: 180px;
+    background: var(--maple); border-radius: 50%; opacity: 0.15;
+  }
+  .hc-label { font-size: 0.75rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; }
+  .hc-headline { font-family: var(--display); font-size: 1.5rem; font-weight: 600; line-height: 1.2; margin-bottom: 1.5rem; }
+  .hc-steps { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .hc-step {
+    display: flex; align-items: center; gap: 0.75rem;
+    font-size: 0.9rem; color: rgba(255,255,255,0.85);
+  }
+  .step-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem; flex-shrink: 0;
+  }
+  .float-badge {
+    position: absolute; right: -20px; top: 40px;
+    background: var(--white); border-radius: 12px;
+    padding: 0.75rem 1rem; box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    font-size: 0.85rem; font-weight: 500; color: var(--ink);
+    white-space: nowrap;
+  }
+  .float-badge span { color: var(--sage); font-weight: 600; }
+  .float-badge2 {
+    position: absolute; left: -20px; bottom: 30px;
+    background: var(--white); border-radius: 12px;
+    padding: 0.75rem 1rem; box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    font-size: 0.85rem;
+  }
+  .flag-row { display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.25rem; }
+  .flag { font-size: 1.1rem; }
+
+  /* SECTION LAYOUTS */
+  section { padding: 80px 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    display: inline-block;
+    background: var(--surface); color: var(--muted);
+    padding: 0.3rem 0.8rem; border-radius: 100px;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  h2 {
+    font-family: var(--display); font-size: clamp(1.8rem, 3vw, 2.75rem);
+    font-weight: 600; line-height: 1.15; letter-spacing: -0.02em;
+    margin-bottom: 1rem; color: var(--ink);
+  }
+  h2 em { font-style: italic; color: var(--maple); }
+  .section-sub { font-size: 1.05rem; color: var(--muted); max-width: 560px; line-height: 1.7; margin-bottom: 3rem; }
+
+  /* PROBLEM */
+  .problem-section { background: var(--ink); color: white; }
+  .problem-section .section-tag { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.6); }
+  .problem-section h2 { color: white; }
+  .problem-section .section-sub { color: rgba(255,255,255,0.65); }
+  .problem-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;
+  }
+  .problem-card {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px; padding: 1.5rem;
+    transition: background 0.2s;
+  }
+  .problem-card:hover { background: rgba(255,255,255,0.1); }
+  .problem-icon { font-size: 1.75rem; margin-bottom: 0.75rem; }
+  .problem-card h3 { font-size: 1rem; font-weight: 500; margin-bottom: 0.35rem; color: white; }
+  .problem-card p { font-size: 0.875rem; color: rgba(255,255,255,0.55); line-height: 1.6; }
+
+  /* SOLUTION */
+  .solution-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem;
+  }
+  .solution-card {
+    background: var(--surface); border-radius: 16px; padding: 1.75rem;
+    border: 1.5px solid transparent; transition: border-color 0.2s, background 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .solution-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 3px; border-radius: 16px 16px 0 0;
+  }
+  .solution-card.maple::before { background: var(--maple); }
+  .solution-card.sky::before { background: var(--sky); }
+  .solution-card.sage::before { background: var(--sage); }
+  .solution-card.gold::before { background: #D4A017; }
+  .solution-card:hover { background: var(--white); border-color: var(--border); }
+  .sol-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .solution-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.4rem; }
+  .solution-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.65; }
+
+  /* HOW IT WORKS */
+  .how-section { background: var(--surface); }
+  .steps-row { display: flex; gap: 0; position: relative; justify-content: center; flex-wrap: wrap; }
+  .step-card {
+    text-align: center; padding: 2rem 1.5rem; flex: 1; min-width: 220px; max-width: 300px;
+    position: relative;
+  }
+  .step-number {
+    width: 52px; height: 52px; border-radius: 50%;
+    background: var(--maple); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-size: 1.4rem; font-weight: 600;
+    margin: 0 auto 1rem;
+  }
+  .step-card h3 { font-size: 1.05rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .step-card p { font-size: 0.875rem; color: var(--muted); line-height: 1.65; }
+  .step-connector {
+    position: absolute; top: 2.75rem; right: -30px;
+    font-size: 1.25rem; color: var(--muted); z-index: 1;
+  }
+
+  /* SERVICES */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+  .service-block {
+    border: 1px solid var(--border); border-radius: 16px; overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .service-block:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.07); }
+  .service-header {
+    padding: 1.25rem 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .service-header.maple { background: var(--maple-light); }
+  .service-header.sky { background: var(--sky-light); }
+  .service-header.sage { background: var(--sage-light); }
+  .service-header.gold { background: #FEF8EC; }
+  .service-header.ink { background: var(--surface); }
+  .service-icon { font-size: 1.5rem; }
+  .service-header h3 { font-size: 1rem; font-weight: 600; }
+  .service-body { padding: 1.25rem 1.5rem; }
+  .service-body ul { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .service-body li {
+    font-size: 0.875rem; color: var(--muted);
+    display: flex; align-items: flex-start; gap: 0.5rem;
+  }
+  .service-body li::before { content: '→'; color: var(--maple); font-size: 0.85rem; margin-top: 0.05rem; flex-shrink: 0; }
+
+  /* ABOUT */
+  .about-section { background: var(--surface); }
+  .about-inner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+  }
+  .about-quote {
+    font-family: var(--display); font-size: 1.6rem; font-style: italic;
+    line-height: 1.4; color: var(--ink); margin-bottom: 1.5rem;
+    border-left: 4px solid var(--maple); padding-left: 1.5rem;
+  }
+  .about-text p { font-size: 1rem; color: var(--muted); line-height: 1.8; margin-bottom: 1rem; }
+  .founder-card {
+    background: var(--white); border-radius: 20px; padding: 2rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  }
+  .founder-avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--maple); display: flex; align-items: center; justify-content: center;
+    font-family: var(--display); font-size: 1.5rem; font-weight: 600; color: white;
+    margin-bottom: 1rem;
+  }
+  .founder-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 0.25rem; }
+  .founder-card .role { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.25rem; }
+  .journey-steps { list-style: none; display: flex; flex-direction: column; gap: 0.75rem; }
+  .journey-step {
+    display: flex; gap: 0.75rem; align-items: flex-start;
+    font-size: 0.9rem; color: var(--muted);
+  }
+  .j-dot {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--maple-light); border: 2px solid var(--maple);
+    flex-shrink: 0; margin-top: 0.1rem;
+  }
+  .founder-mission {
+    margin-top: 1.5rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem; color: var(--maple); font-weight: 500; line-height: 1.6;
+  }
+
+  /* TRUST */
+  .trust-section { text-align: center; }
+  .trust-row {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem;
+    margin-top: 2.5rem;
+  }
+  .trust-item {
+    display: flex; flex-direction: column; align-items: center; gap: 0.4rem;
+  }
+  .trust-num { font-family: var(--display); font-size: 2.25rem; font-weight: 600; color: var(--maple); }
+  .trust-label { font-size: 0.875rem; color: var(--muted); }
+
+  /* CONTACT */
+  .contact-section { background: var(--ink); color: white; }
+  .contact-section h2 { color: white; }
+  .contact-section .section-sub { color: rgba(255,255,255,0.6); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label { font-size: 0.85rem; color: rgba(255,255,255,0.7); }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px; padding: 0.75rem 1rem;
+    font-family: var(--body); font-size: 0.9rem; color: white;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-group input::placeholder,
+  .form-group textarea::placeholder { color: rgba(255,255,255,0.3); }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: rgba(255,255,255,0.4); }
+  .form-group select option { background: var(--ink); }
+  .form-group textarea { resize: vertical; min-height: 100px; }
+  .btn-form {
+    background: var(--maple); color: white;
+    padding: 0.85rem; border-radius: 10px;
+    font-size: 0.95rem; font-weight: 500; border: none; cursor: pointer;
+    transition: opacity 0.2s; font-family: var(--body);
+  }
+  .btn-form:hover { opacity: 0.88; }
+  .contact-info { display: flex; flex-direction: column; gap: 1.5rem; }
+  .contact-method {
+    display: flex; gap: 1rem; align-items: flex-start;
+    padding: 1.25rem; background: rgba(255,255,255,0.06);
+    border-radius: 14px; border: 1px solid rgba(255,255,255,0.1);
+  }
+  .cm-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.25rem; flex-shrink: 0;
+  }
+  .cm-text h4 { font-size: 0.95rem; font-weight: 500; margin-bottom: 0.2rem; }
+  .cm-text p { font-size: 0.85rem; color: rgba(255,255,255,0.55); }
+  .cm-text a { color: rgba(255,255,255,0.85); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* FOOTER */
+  footer {
+    padding: 2.5rem 2rem; background: var(--ink); color: rgba(255,255,255,0.45);
+    text-align: center; font-size: 0.85rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+  footer .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  footer a { color: rgba(255,255,255,0.55); transition: color 0.2s; }
+  footer a:hover { color: white; }
+  .footer-logo { font-family: var(--display); font-size: 1.1rem; font-weight: 600; color: white; }
+  .footer-logo span { color: var(--maple); }
+  .disclaimer {
+    max-width: 1100px; margin: 0 auto; padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.07); margin-top: 1rem;
+    font-size: 0.78rem; color: rgba(255,255,255,0.3); line-height: 1.6; text-align: left;
+  }
+
+  /* PAGE SECTIONS */
+  .page-section { display: none; }
+  .page-section.active { display: block; }
+
+  /* NAV ACTIVE */
+  .nav-links a.active { color: var(--ink); font-weight: 500; }
+
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; gap: 2.5rem; padding: 60px 1.5rem 60px; }
+    .hero-visual { display: none; }
+    .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .nav-mobile-menu { display: block; }
+    .mobile-nav {
+      position: fixed; inset: 0; background: white; z-index: 200;
+      display: flex; flex-direction: column; padding: 2rem;
+      gap: 1.5rem;
+    }
+    .mobile-nav a { font-size: 1.25rem; font-weight: 500; }
+    .float-badge, .float-badge2 { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#" onclick="showPage('home')">Pathway<span>CA</span></a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+    <li><a href="#" onclick="showPage('services')" id="nav-services">Services</a></li>
+    <li><a href="#" onclick="showPage('about')" id="nav-about">About</a></li>
+    <li><a href="#" onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+  </ul>
+  <a class="nav-cta" href="#" onclick="showPage('contact')">Book Free Consultation</a>
+  <button class="nav-mobile-menu" onclick="toggleMobileNav()">☰</button>
+</nav>
+
+<div id="mobile-nav" style="display:none;" class="mobile-nav">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+    <span class="nav-logo">Pathway<span style="color:var(--maple)">CA</span></span>
+    <button onclick="toggleMobileNav()" style="background:none;border:none;font-size:1.5rem;cursor:pointer;">✕</button>
+  </div>
+  <a href="#" onclick="showPage('home');toggleMobileNav()">Home</a>
+  <a href="#" onclick="showPage('services');toggleMobileNav()">Services</a>
+  <a href="#" onclick="showPage('about');toggleMobileNav()">About</a>
+  <a href="#" onclick="showPage('contact');toggleMobileNav()">Contact</a>
+  <a class="btn-primary" href="#" onclick="showPage('contact');toggleMobileNav()">Book Free Consultation</a>
+</div>
+
+<!-- ===== HOME PAGE ===== -->
+<div id="page-home" class="page-section active">
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="hero-content">
+      <div class="hero-tag">Bangladesh → Canada</div>
+      <h1>Your Complete <em>Canada Journey</em> Support System</h1>
+      <p class="hero-sub">From Bangladesh to Canada — we guide you through studying, settling, and building a successful life. Real experience. Practical guidance.</p>
+      <div class="hero-btns">
+        <a class="btn-primary" href="#" onclick="showPage('contact')">Book Free Consultation</a>
+        <a class="btn-secondary" href="#" onclick="showPage('services')">Explore Services</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-dots">
+          <div class="trust-dot">🇧🇩</div>
+          <div class="trust-dot">✈</div>
+          <div class="trust-dot">🍁</div>
+        </div>
+        <span>Built by a Bangladeshi student who made it to Canada</span>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-main">
+        <div class="hc-label">Your journey, step by step</div>
+        <div class="hc-headline">From Dhaka<br/>to your dream campus</div>
+        <ul class="hc-steps">
+          <li class="hc-step"><div class="step-icon">📋</div> Study plan & university selection</li>
+          <li class="hc-step"><div class="step-icon">✈️</div> Pre-arrival preparation</li>
+          <li class="hc-step"><div class="step-icon">🏠</div> Housing, banking, SIM setup</li>
+          <li class="hc-step"><div class="step-icon">💼</div> Career & job preparation</li>
+          <li class="hc-step"><div class="step-icon">🤝</div> Community & mentorship</li>
+        </ul>
+      </div>
+      <div class="float-badge">✅ <span>200+ students</span> guided</div>
+      <div class="float-badge2">
+        <div class="flag-row"><span class="flag">🇧🇩</span> → <span class="flag">🍁</span></div>
+        <div style="font-size:0.8rem;color:var(--muted)">1:1 mentorship available</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Problem -->
+  <section class="problem-section">
+    <div class="container">
+      <div class="section-tag">The real challenge</div>
+      <h2 style="color:white;">Most students arrive in Canada<br/><em style="color:#F87171">unprepared and overwhelmed</em></h2>
+      <p class="section-sub">Even after getting admitted, the real journey is full of unexpected hurdles that nobody warns you about.</p>
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-icon">😰</div>
+          <h3>Confusion & Overwhelm</h3>
+          <p>Too much conflicting information online, not knowing what to trust or where to start.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">🏠</div>
+          <h3>Housing Struggles</h3>
+          <p>Difficulty finding safe, affordable housing before or right after arrival.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">😔</div>
+          <h3>Loneliness</h3>
+          <p>Feeling isolated far from family, without a community that understands your background.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">💼</div>
+          <h3>Job Search Difficulties</h3>
+          <p>Canadian work culture is different. Most international students don't know where to begin.</p>
+        </div>
+        <div class="problem-card">
+          <div class="problem-icon">🌍</div>
+          <h3>Cultural Shock</h3>
+          <p>Adjusting to a new culture, climate, lifestyle, and expectations all at once is hard.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solution -->
+  <section>
+    <div class="container">
+      <div class="section-tag">Our solution</div>
+      <h2>We support you at <em>every stage</em></h2>
+      <p class="section-sub">PathwayCA is not just a service — it's a complete support system built from real student experience in Canada.</p>
+      <div class="solution-grid">
+        <div class="solution-card maple">
+          <div class="sol-icon">🎯</div>
+          <h3>Before Departure</h3>
+          <p>Study plan guidance, university selection support, IELTS roadmap, application overview, and budget planning so you arrive prepared.</p>
+        </div>
+        <div class="solution-card sky">
+          <div class="sol-icon">✈️</div>
+          <h3>Pre-Arrival Support</h3>
+          <p>Document checklist, packing guide, life-in-Canada expectations, and a first-week survival guide so nothing surprises you.</p>
+        </div>
+        <div class="solution-card sage">
+          <div class="sol-icon">🏙️</div>
+          <h3>Arrival & Settlement</h3>
+          <p>Airport guidance, housing search, banking setup, transportation, and SIM card help — the practical essentials done right.</p>
+        </div>
+        <div class="solution-card gold">
+          <div class="sol-icon">🚀</div>
+          <h3>Career & Job Support</h3>
+          <p>Canadian resume, LinkedIn strategy, job search roadmap, interview coaching, and networking — built for international students.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-section">
+    <div class="container">
+      <div style="text-align:center;margin-bottom:0.5rem;" class="section-tag">Simple process</div>
+      <h2 style="text-align:center;">How it works</h2>
+      <p class="section-sub" style="text-align:center;margin:0 auto 3rem;">Three easy steps to start your supported Canada journey.</p>
+      <div class="steps-row">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Book a Free Consultation</h3>
+          <p>Tell us where you are in your journey. We'll understand your goals and challenges in a no-pressure 30-minute call.</p>
+          <div class="step-connector">→</div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Get Your Personalized Roadmap</h3>
+          <p>Based on your situation, we create a clear, step-by-step roadmap tailored to your timeline, budget, and goals.</p>
+          <div class="step-connector">→</div>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>Join Community & Mentorship</h3>
+          <p>Get connected with our student community, matched with a mentor, and supported throughout your entire journey.</p>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:2.5rem;">
+        <a class="btn-primary" href="#" onclick="showPage('contact')">Book Free Consultation →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust -->
+  <section class="trust-section">
+    <div class="container">
+      <div class="section-tag">Why trust us</div>
+      <h2>Built from <em>real experience</em></h2>
+      <p class="section-sub" style="margin:0 auto 2rem;">We don't give theoretical advice. Everything we share comes from lived experience navigating the exact challenges you face.</p>
+      <div class="trust-row">
+        <div class="trust-item"><div class="trust-num">200+</div><div class="trust-label">Students guided</div></div>
+        <div class="trust-item"><div class="trust-num">5+</div><div class="trust-label">Years of experience</div></div>
+        <div class="trust-item"><div class="trust-num">10+</div><div class="trust-label">Canadian provinces covered</div></div>
+        <div class="trust-item"><div class="trust-num">100%</div><div class="trust-label">Real-world guidance</div></div>
+      </div>
+      <div style="max-width:640px;margin:3rem auto 0;background:var(--surface);border-radius:16px;padding:2rem;border:1px solid var(--border);">
+        <div style="font-family:var(--display);font-size:1.2rem;font-style:italic;line-height:1.5;color:var(--ink);margin-bottom:1rem;">"PathwayCA helped me understand what to expect before I even landed. The housing advice alone saved me weeks of stress."</div>
+        <div style="font-size:0.875rem;color:var(--muted);">— Raihan Ahmed, now studying at University of Toronto</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="background:var(--maple-light);text-align:center;">
+    <div class="container" style="max-width:640px;">
+      <h2>Ready to start your <em>Canada journey</em>?</h2>
+      <p style="color:var(--muted);margin:1rem 0 2rem;font-size:1.05rem;line-height:1.7;">Join hundreds of Bangladeshi students who navigated Canada with confidence — not confusion.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+        <a class="btn-primary" href="#" onclick="showPage('contact')">Book Free Consultation</a>
+        <a class="btn-secondary" href="#" onclick="showPage('services')">View All Services</a>
+      </div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-top:1.25rem;">⚠️ PathwayCA is a student guidance and mentorship platform. We are not a licensed immigration consultancy and do not guarantee visa approvals.</p>
+    </div>
+  </section>
+
+</div><!-- end home -->
+
+
+<!-- ===== SERVICES PAGE ===== -->
+<div id="page-services" class="page-section">
+  <section style="padding-top:60px;">
+    <div class="container">
+      <div class="section-tag">What we offer</div>
+      <h2>Complete support from <em>start to success</em></h2>
+      <p class="section-sub">Whether you're still in Bangladesh or already in Canada, we have the right guidance for your stage of the journey.</p>
+      <div class="services-grid">
+
+        <div class="service-block">
+          <div class="service-header maple">
+            <div class="service-icon">📚</div>
+            <h3>Pre-Canada Support</h3>
+          </div>
+          <div class="service-body">
+            <ul>
+              <li>Study plan guidance and goal setting</li>
+              <li>University & college selection support</li>
+              <li>IELTS preparation roadmap</li>
+              <li>Application guidance overview</li>
+              <li>Budget planning for studying in Canada</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="service-block">
+          <div class="service-header sky">
+            <div class="service-icon">🗺️</div>
+            <h3>Pre-Arrival Support</h3>
+          </div>
+          <div class="service-body">
+            <ul>
+              <li>Document checklist guidance</li>
+              <li>Packing and preparation checklist</li>
+              <li>Life in Canada expectations guide</li>
+              <li>First-week survival guide</li>
+              <li>Cultural orientation briefing</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="service-block">
+          <div class="service-header sage">
+            <div class="service-icon">🏙️</div>
+            <h3>Arrival & Settlement</h3>
+          </div>
+          <div class="service-body">
+            <ul>
+              <li>Airport arrival guidance</li>
+              <li>Housing search guidance</li>
+              <li>Canadian banking setup guidance</li>
+              <li>Transportation system explanation</li>
+              <li>SIM card and phone setup</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="service-block">
+          <div class="service-header gold">
+            <div class="service-icon">💼</div>
+            <h3>Career & Job Support</h3>
+          </div>
+          <div class="service-body">
+            <ul>
+              <li>Canadian resume building guidance</li>
+              <li>LinkedIn optimization strategy</li>
+              <li>Job search roadmap</li>
+              <li>Interview preparation coaching</li>
+              <li>Networking strategy for international students</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="service-block">
+          <div class="service-header ink">
+            <div class="service-icon">🤝</div>
+            <h3>Student Mentorship Program</h3>
+          </div>
+          <div class="service-body">
+            <ul>
+              <li>1:1 mentorship sessions with experienced mentors</li>
+              <li>Personalized roadmap creation</li>
+              <li>Monthly check-in calls</li>
+              <li>Community access included</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="service-block">
+          <div class="service-header maple">
+            <div class="service-icon">👥</div>
+            <h3>Community Membership</h3>
+          </div>
+          <div class="service-body">
+            <ul>
+              <li>Student WhatsApp & Discord community</li>
+              <li>Peer support network</li>
+              <li>Live Q&A sessions</li>
+              <li>Networking with Bangladeshi students across Canada</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="service-block">
+          <div class="service-header sky">
+            <div class="service-icon">🌟</div>
+            <h3>Long-Term Success Guidance</h3>
+          </div>
+          <div class="service-body">
+            <ul>
+              <li>PR pathway overview (general information)</li>
+              <li>Long-term career planning strategy</li>
+              <li>Settlement roadmap for your future</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+
+      <div style="margin-top:3.5rem;background:var(--ink);border-radius:20px;padding:2.5rem;color:white;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem;">
+        <div>
+          <h3 style="font-family:var(--display);font-size:1.5rem;margin-bottom:0.5rem;color:white;">Not sure which service is right for you?</h3>
+          <p style="color:rgba(255,255,255,0.6);font-size:0.95rem;">Book a free 30-minute consultation and we'll guide you to the right support.</p>
+        </div>
+        <a class="btn-primary" href="#" onclick="showPage('contact')" style="white-space:nowrap;">Book Free Consultation</a>
+      </div>
+
+      <p style="margin-top:1.5rem;font-size:0.8rem;color:var(--muted);line-height:1.7;">⚠️ PathwayCA provides educational guidance and mentorship only. We are not a licensed immigration consultant or RCIC, and we do not provide legal immigration advice or guarantee any visa outcomes.</p>
+    </div>
+  </section>
+</div><!-- end services -->
+
+
+<!-- ===== ABOUT PAGE ===== -->
+<div id="page-about" class="page-section">
+  <section class="about-section">
+    <div class="container about-inner">
+      <div class="about-text">
+        <div class="section-tag">Our story</div>
+        <h2>Built from the <em>inside</em></h2>
+        <div class="about-quote">"I learned everything the hard way. PathwayCA exists so you don't have to."</div>
+        <p>Our founder moved from Bangladesh to Canada as an international student — just like you. They experienced every challenge firsthand: the confusion of choosing the right program, the stress of finding housing, the loneliness of settling into a new culture, and the difficulty of landing a first job in Canada.</p>
+        <p>Through years of trial, error, and adaptation, they built a deep understanding of what it really takes to succeed as a Bangladeshi student in Canada — not just academically, but personally and professionally.</p>
+        <p>PathwayCA was built to share that hard-won knowledge with every student who follows the same path. No sugarcoating. No empty promises. Just practical, honest, real-world guidance.</p>
+        <div style="margin-top:2rem;padding:1.5rem;background:var(--maple-light);border-radius:14px;border-left:4px solid var(--maple);">
+          <p style="font-size:1rem;color:var(--ink);font-weight:500;line-height:1.6;">"Our mission is to help students build not just a life in Canada — but a successful future."</p>
+        </div>
+      </div>
+      <div>
+        <div class="founder-card">
+          <div class="founder-avatar">S</div>
+          <h3>Founder, PathwayCA</h3>
+          <div class="role">Bangladesh → Canada | International Student Mentor</div>
+          <ul class="journey-steps">
+            <li class="journey-step"><div class="j-dot"></div> Moved from Bangladesh to Canada for higher education</li>
+            <li class="journey-step"><div class="j-dot"></div> Experienced real challenges navigating Canadian student life</li>
+            <li class="journey-step"><div class="j-dot"></div> Learned through experience, mistakes, and adaptation</li>
+            <li class="journey-step"><div class="j-dot"></div> Helped 200+ students avoid the same confusion</li>
+            <li class="journey-step"><div class="j-dot"></div> Built PathwayCA to help others succeed faster</li>
+          </ul>
+          <div class="founder-mission">🍁 Committed to helping every Bangladeshi student build a successful life in Canada.</div>
+        </div>
+
+        <div style="margin-top:1.5rem;background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.25rem;">
+          <h4 style="font-size:0.9rem;font-weight:600;margin-bottom:0.75rem;">Our values</h4>
+          <ul style="list-style:none;display:flex;flex-direction:column;gap:0.6rem;">
+            <li style="font-size:0.875rem;color:var(--muted);display:flex;gap:0.5rem;"><span style="color:var(--maple);">✦</span> Honesty over hype — realistic guidance only</li>
+            <li style="font-size:0.875rem;color:var(--muted);display:flex;gap:0.5rem;"><span style="color:var(--maple);">✦</span> Practical wisdom from lived experience</li>
+            <li style="font-size:0.875rem;color:var(--muted);display:flex;gap:0.5rem;"><span style="color:var(--maple);">✦</span> Community-first — you are never alone</li>
+            <li style="font-size:0.875rem;color:var(--muted);display:flex;gap:0.5rem;"><span style="color:var(--maple);">✦</span> Respect for your family's trust and investment</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="text-align:center;background:var(--maple);color:white;padding:60px 2rem;">
+    <div class="container" style="max-width:600px;">
+      <h2 style="color:white;">Ready to start your journey with us?</h2>
+      <p style="color:rgba(255,255,255,0.8);margin:1rem 0 2rem;font-size:1.05rem;">We'd love to hear your story and help you plan your path to Canada.</p>
+      <a class="btn-secondary" href="#" onclick="showPage('contact')">Book a Free Consultation</a>
+    </div>
+  </section>
+</div><!-- end about -->
+
+
+<!-- ===== CONTACT PAGE ===== -->
+<div id="page-contact" class="page-section">
+  <section class="contact-section">
+    <div class="container">
+      <div class="section-tag" style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);">Get in touch</div>
+      <h2>Book your <em style="color:#F87171;">free consultation</em></h2>
+      <p class="section-sub">Tell us about your situation and goals. We'll get back to you within 24 hours to schedule your free 30-minute call.</p>
+
+      <div class="contact-grid">
+        <div>
+          <form class="contact-form" onsubmit="handleFormSubmit(event)">
+            <div class="form-row">
+              <div class="form-group">
+                <label>First name</label>
+                <input type="text" placeholder="Your first name" required />
+              </div>
+              <div class="form-group">
+                <label>Last name</label>
+                <input type="text" placeholder="Your last name" required />
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email address</label>
+              <input type="email" placeholder="your@email.com" required />
+            </div>
+            <div class="form-group">
+              <label>WhatsApp number (optional)</label>
+              <input type="tel" placeholder="+880 1XXX XXXXXX" />
+            </div>
+            <div class="form-group">
+              <label>Where are you in your journey?</label>
+              <select>
+                <option value="">Select your stage...</option>
+                <option>Still planning — haven't applied yet</option>
+                <option>Applied and waiting for offer letter</option>
+                <option>Admitted and preparing to travel</option>
+                <option>Just arrived in Canada</option>
+                <option>Already studying in Canada</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>What do you need help with?</label>
+              <textarea placeholder="Tell us briefly about your situation and what you're looking for..."></textarea>
+            </div>
+            <button type="submit" class="btn-form">Book Free Consultation →</button>
+          </form>
+          <div id="form-success" style="display:none;background:rgba(46,125,86,0.15);border:1px solid rgba(46,125,86,0.3);border-radius:12px;padding:1.5rem;margin-top:1rem;color:white;text-align:center;">
+            <div style="font-size:1.5rem;margin-bottom:0.5rem;">✅</div>
+            <strong>Thank you! Your message has been sent.</strong><br/>
+            <span style="font-size:0.875rem;opacity:0.8;">We'll get back to you within 24 hours to schedule your free consultation.</span>
+          </div>
+        </div>
+
+        <div class="contact-info">
+          <div style="margin-bottom:0.5rem;">
+            <h3 style="color:white;font-size:1.2rem;margin-bottom:0.5rem;">Other ways to reach us</h3>
+            <p style="color:rgba(255,255,255,0.55);font-size:0.9rem;">We're here to help. Reach out through any of these channels.</p>
+          </div>
+
+          <div class="contact-method">
+            <div class="cm-icon">📧</div>
+            <div class="cm-text">
+              <h4>Email us</h4>
+              <p>For detailed questions or to share your situation: <a href="mailto:hello@pathwayca.com">hello@pathwayca.com</a></p>
+            </div>
+          </div>
+
+          <div class="contact-method">
+            <div class="cm-icon">💬</div>
+            <div class="cm-text">
+              <h4>WhatsApp</h4>
+              <p>Quick questions? Message us directly on WhatsApp for a faster response.</p>
+            </div>
+          </div>
+
+          <div class="contact-method">
+            <div class="cm-icon">👥</div>
+            <div class="cm-text">
+              <h4>Join the community</h4>
+              <p>Connect with other Bangladeshi students in Canada in our free student community group.</p>
+            </div>
+          </div>
+
+          <div style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:1.25rem;">
+            <h4 style="font-size:0.9rem;font-weight:600;color:white;margin-bottom:0.5rem;">⏱ Response time</h4>
+            <p style="font-size:0.85rem;color:rgba(255,255,255,0.55);line-height:1.6;">We typically respond within 24 hours. For urgent questions, WhatsApp is the fastest channel.</p>
+          </div>
+
+          <div style="padding:1.25rem;border-radius:14px;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);">
+            <p style="font-size:0.78rem;color:rgba(255,255,255,0.35);line-height:1.7;">⚠️ <strong style="color:rgba(255,255,255,0.5)">Important:</strong> PathwayCA is a student mentorship and guidance platform only. We do not provide legal immigration advice and are not a licensed RCIC (Regulated Canadian Immigration Consultant). Please consult a licensed professional for immigration legal matters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- end contact -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo">Pathway<span>CA</span></span>
+    <div style="display:flex;gap:1.5rem;">
+      <a href="#" onclick="showPage('home')">Home</a>
+      <a href="#" onclick="showPage('services')">Services</a>
+      <a href="#" onclick="showPage('about')">About</a>
+      <a href="#" onclick="showPage('contact')">Contact</a>
+    </div>
+    <span>© 2025 PathwayCA. All rights reserved.</span>
+  </div>
+  <div class="disclaimer">
+    PathwayCA is a student guidance and mentorship platform. We are not a licensed immigration consultancy (RCIC) and we do not provide legal immigration advice, guarantee visa approvals, or represent clients in immigration proceedings. All content is for educational and informational purposes only. For immigration legal matters, please consult a Regulated Canadian Immigration Consultant (RCIC) or a licensed immigration lawyer.
+  </div>
+</footer>
+
+<script>
+  function showPage(page) {
+    document.querySelectorAll('.page-section').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    const navEl = document.getElementById('nav-' + page);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return false;
+  }
+
+  function toggleMobileNav() {
+    const mn = document.getElementById('mobile-nav');
+    mn.style.display = mn.style.display === 'none' ? 'flex' : 'none';
+  }
+
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    e.target.style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+</script>
+</body>
+</html>
